@@ -22,7 +22,11 @@ server.addService(grpcService.StudentService.service, {
 server.bind("localhost:8899", grpc.ServerCredentials.createInsecure());
 server.start();
 
-
+/**
+ * 普通调用
+ * @param call
+ * @param callback
+ */
 function getRealNameByUsername(call, callback) {
     console.log("客户端1", call.request.username)
 
@@ -49,10 +53,11 @@ function getRealNamesByUsernames(call, callback) {
     call.on('data', function(data) {
         console.log("3客户端:", data)
     });
-
     // 获取数据结束:
     call.on('end', function() {
-        callback(null, {realname:"张三三啊1"});
+        // 返回数据
+        console.log("3客户端:获取数据结束,开始返回..")
+        callback(null, {response:[{realname:"张三三啊1"},{realname:"张三三啊2"}]});
     });
 }
 
