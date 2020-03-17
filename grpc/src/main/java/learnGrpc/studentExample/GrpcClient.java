@@ -13,7 +13,7 @@ import learnGrpc.studentExample.generated.StudentServiceGrpc;
 import learnGrpc.studentExample.generated.StudentServiceGrpc.StudentServiceBlockingStub;
 
 /**
- * @author jiangfeng <jiangfeng@kuaishou.com>
+ * @author jiangfeng
  * Created on 2020-03-13
  */
 public class GrpcClient {

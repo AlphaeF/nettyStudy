@@ -15,9 +15,7 @@ public class StudentserviceImpl extends StudentServiceGrpc.StudentServiceImplBas
 
     @Override
     public void getRealNameByUsername(MyRequest request, StreamObserver<MyResponse> responseObserver) {
-
         System.out.println("接收到客户端:"+request.getUsername());
-
         responseObserver.onNext(MyResponse.newBuilder().setRealname("李四").build());
         responseObserver.onCompleted();
         // super.getRealNameByUsername(request, responseObserver);

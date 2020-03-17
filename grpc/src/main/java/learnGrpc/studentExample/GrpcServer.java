@@ -7,7 +7,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 /**
- * @author jiangfeng <jiangfeng@kuaishou.com>
+ * @author jiangfeng
  * Created on 2020-03-13
  */
 public class GrpcServer {
