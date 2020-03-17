@@ -114,7 +114,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
 
         ChannelFuture channelFuture = ctx.writeAndFlush(response);
-        //ctx.close();
+        ctx.close();
     }
 
     /*@Override
