@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.shengsiyuan.proto;
+
+option java_package = "learnGrpc.studentExample.generated";
+option java_outer_classname = "StudentProto";
+option java_multiple_files = true;
+
+service StudentService {
+
+    rpc GetRealNameByUsername(MyRequest) returns (MyResponse) {}
+
+    rpc GetRealNamesByUsername(MyRequest) returns (stream MyResponse) {}
+
+    rpc GetRealNamesByUsernames(stream MyRequest) returns (MyResponseList) {}
+
+    rpc GetRealNamesByUsernamess(stream MyRequest) returns (stream MyResponse) {}
+
+}
+
+message MyRequest {
+    string username = 1;
+}
+
+message MyResponse {
+    string realname = 1;
+}
+
+message MyResponseList {
+    repeated MyResponse response = 1;
+}
+
+
+
