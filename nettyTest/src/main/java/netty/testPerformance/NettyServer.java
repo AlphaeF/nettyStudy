@@ -20,6 +20,9 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
  * <p>
  * Created on 2020-03-16
  * 测试netty服务器性能
+ * 2000并发:
+ * label样本	平均值	中位数	最小值	最大值	异常 %	吞吐量	接收 KB/sec	发送 KB/sec
+ * netty	10000	37	 158	0	181	0.000%	14471.78003	1059.94	1681.78
  */
 public class NettyServer {
 

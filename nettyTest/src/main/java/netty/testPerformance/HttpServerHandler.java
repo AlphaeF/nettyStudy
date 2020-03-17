@@ -7,11 +7,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -27,11 +32,24 @@ import io.netty.util.CharsetUtil;
 /**
  * 自定义 http处理器
  * Created on 2020-03-16
+ *
  */
 @Sharable
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     private final static Logger log = Logger.getLogger(HttpServerHandler.class.getName());
+
+    {
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(Level.ALL);
+        consoleHandler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                return record.getMillis()+"-["+record.getThreadID()+"]:"+record.getMessage();
+            }
+        });
+        log.addHandler(consoleHandler);
+    }
 
     AtomicInteger a = new AtomicInteger();
     int workThreads;
@@ -42,7 +60,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     private ThreadPoolExecutor[] executors;
 
     public HttpServerHandler(int workThreads) {
-        //给业务线程命名
+        // 给业务线程命名
         ThreadFactory factory = new ThreadFactory() {
             AtomicInteger seq = new AtomicInteger();
 
@@ -87,16 +105,15 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
      * 处理
      */
     private void dispatch(ChannelHandlerContext ctx, HttpObject msg) {
-        //log.info(String.valueOf(a.getAndIncrement()));
+        log.info(String.valueOf(a.getAndIncrement()));
         //System.out.println(Thread.currentThread().getName()+":"+);
-        System.out.println(a.getAndIncrement());
         ByteBuf byteBuf = Unpooled.copiedBuffer("Hello Word", CharsetUtil.UTF_8);
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, byteBuf);
         // 构建返回头
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
 
-        ctx.writeAndFlush(response);
+        ChannelFuture channelFuture = ctx.writeAndFlush(response);
         //ctx.close();
     }
 
